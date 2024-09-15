@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request, abort
 from user.models import User
+from user.cache import cache
 
 user_bp = Blueprint('user', __name__)
 
 # GET /users - Returns a paginated list of all users
+@cache.cached(timeout=60, key_prefix='all_users')
 @user_bp.route('/users', methods=['GET'])
 def get_users():
     try:
@@ -35,9 +37,8 @@ def get_user(id):
 @user_bp.route('/users', methods=['POST'])
 def post_user():
     data = request.get_json()
-    
-    result = User.create_user(data)
-    return jsonify({"id": str(result.inserted_id), "message": "User created"}), 202
+    new_user = User.create_user(data)
+    return jsonify({"id": str(new_user.inserted_id), "message": "User created"}), 202
 
 # PUT /users/<id> - Updates the user with the specified ID
 @user_bp.route('/users/<id>', methods=['PUT'])
@@ -55,6 +56,7 @@ def update_user(id):
 def delete_user(id):
     success = User.delete_user(id)
     if success:
+        cache.delete('all_users') 
         return jsonify({"message": "User deleted"}), 200
     else:
         return abort(404, description="User not found")

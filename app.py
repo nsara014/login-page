@@ -1,8 +1,10 @@
 # app.py
 from flask import Flask
 from user.routes import user_bp
+from user.cache import init_cache
 
 app = Flask(__name__)
+init_cache(app)
 
 # Register Blueprints
 app.register_blueprint(user_bp)

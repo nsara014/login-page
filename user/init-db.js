@@ -5,13 +5,13 @@ db.user_db.insertMany([
   {
     id: "001",
     name: "Micheal Reade",
-    email: "Mreade@servicenow.com",
-    password: "Servicenow0101"
+    email: "samplename@sample.com",
+    password: "Password1"
   },
   {
     id: "002",
     name: "Micheal Readee",
-    email: "Mreade2@servicenow.com",
-    password: "Servicenow0102"
+    email: "Samplename2@sample.com",
+    password: "Password2"
   }
 ]);
