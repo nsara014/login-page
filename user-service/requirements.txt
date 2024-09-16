@@ -1,0 +1,6 @@
+flask
+pymongo
+passlib
+Flask-Caching
+celery 
+requests

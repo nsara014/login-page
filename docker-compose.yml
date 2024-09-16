@@ -1,13 +1,25 @@
+version: "3"
+
 services:
-  app:
-    build: .
-    command: python -u app.py
+  user-service:
+    build: ./user-service
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  application-service:
+    build: ./application-service
     ports:
       - "5000:5000"
-    volumes:
-      - .:/app
-    links:
+    depends_on:
+      - user-service
       - db
+    networks:
+      - app-network
+
   db:
     image: mongo:latest
     environment:
@@ -15,6 +27,12 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=pass
     volumes:
-      - ./user/init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
+      - ./user-service/user/init-db.js:/docker-entrypoint-initdb.d/init-db.js:ro
     ports:
       - 27017:27017
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

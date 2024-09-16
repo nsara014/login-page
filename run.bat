@@ -1,5 +1,4 @@
 @echo off
-pip3 install -r requirements.txt
 
 :: Start Docker Desktop if not already running (Windows)
 start "" "%ProgramFiles%\Docker\Docker\Docker Desktop.exe"
@@ -15,8 +14,6 @@ if %errorlevel% neq 0 (
 
 echo Docker is ready!
 
-:: Build Docker image
-docker build -t flask_app .
 
 :: Run Docker container using Docker Compose
 start "" docker-compose up --build
